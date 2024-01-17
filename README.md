@@ -1,7 +1,7 @@
 # LethalAvatars
 A Lethal Company mod that allows you to export Avatars directly from Unity
 
-![image](https://github.com/200Tigersbloxed/LethalAvatars/assets/45884377/ee275e50-1f88-42b3-9882-b6af22285fb8)
+![banner](https://github.com/200Tigersbloxed/LethalAvatars/assets/45884377/763ab7a5-4a54-4c9f-9289-6dc536b6f16d)
 
 To describe this mod very shortly, it allows you to express your creativity and show it off to your friends while playing your most favorite game ever! If you're familiar with the avatar creation process for games like VRChat, ChilloutVR, or [Hypernex](https://www.hypernex.dev/) (shameless plug), you'll be very familiar with this system.
 
