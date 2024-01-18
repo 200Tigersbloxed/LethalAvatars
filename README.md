@@ -87,14 +87,14 @@ Slight warning, things get technical here, but I will keep it in a neat and simp
 
 6. Navigate to your LethalAvatars build output, regardless of if it was DEBUG or RELEASE.
 7. Copy the following files
-  + `LethalAvatars.SDK.dll`
-  + `protobuf-net.dll`
-  + `protobuf-net.Core.dll`
-  + `System.Buffers.dll`
-  + `System.Collections.Immutable.dll`
-  + `System.Memory.dll`
-  + `System.Numerics.Vectors.dll`
-  + `System.Runtime.CompilerServices.Unsafe.dll`
+    + `LethalAvatars.SDK.dll`
+    + `protobuf-net.dll`
+    + `protobuf-net.Core.dll`
+    + `System.Buffers.dll`
+    + `System.Collections.Immutable.dll`
+    + `System.Memory.dll`
+    + `System.Numerics.Vectors.dll`
+    + `System.Runtime.CompilerServices.Unsafe.dll`
 8. Paste the files from the previous step into the `Libs` folder in the LethalAvatars solution.
 9. Build again!
 
