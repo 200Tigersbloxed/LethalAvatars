@@ -46,7 +46,7 @@ Currently, there is no service for distributing avatars. While you could always 
 
 # Building
 
-Slight warning, things get technical here, but I will keep it in a neat and simplified checklist.
+For you tech-savvy nerds who don't want pre-builts or want to contribute. (no shame, shoutout to all the dorks out there)
 
 1. Pull the code, open the solution in your preferred IDE, and import NuGet packages
 2. Create a file in the LethalAvatars project called `LethalAvatars.csproj.user`, and set the text to the following
@@ -80,23 +80,6 @@ Slight warning, things get technical here, but I will keep it in a neat and simp
 ```
   + Replace `path/to/Unity 2022.3.9f1` with your Unity install directory
 5. Reload all the projects and Build
-
-> [!IMPORTANT]
-> ### STOP!
-> We're not done yet.
-
-6. Navigate to your LethalAvatars build output, regardless of if it was DEBUG or RELEASE.
-7. Copy the following files
-    + `LethalAvatars.SDK.dll`
-    + `protobuf-net.dll`
-    + `protobuf-net.Core.dll`
-    + `System.Buffers.dll`
-    + `System.Collections.Immutable.dll`
-    + `System.Memory.dll`
-    + `System.Numerics.Vectors.dll`
-    + `System.Runtime.CompilerServices.Unsafe.dll`
-8. Paste the files from the previous step into the `Libs` folder in the LethalAvatars solution.
-9. Build again!
 
 ## Why is building like this?
 
