@@ -14,6 +14,10 @@
         <RootNamespace>LethalAvatars</RootNamespace>
     </PropertyGroup>
 
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+        <DebugType>none</DebugType>
+    </PropertyGroup>
+
     <ItemGroup>
         <EmbeddedResource Include="$(PkgSamboy063_Tomlet)\lib\net35\Tomlet.dll">
             <LogicalName>LethalAvatars.Libs.Tomlet.dll</LogicalName>
