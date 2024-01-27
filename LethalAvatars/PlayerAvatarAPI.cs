@@ -152,7 +152,7 @@ public static class PlayerAvatarAPI
         // Add new stuff
         clonedAvatar.gameObject.name = "avatar";
         clonedAvatar.transform.SetParent(metarig.parent);
-        clonedAvatar.transform.SetLocalPositionAndRotation(Vector3.zero, new Quaternion(0, 0, 0, 0));
+        clonedAvatar.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
         AvatarDriver avatarDriver = clonedAvatar.gameObject.AddComponent<AvatarDriver>();
         avatarDriver.player = player;
         avatarDriver.Avatar = clonedAvatar;
@@ -161,7 +161,8 @@ public static class PlayerAvatarAPI
         avatarDriver.lastServerItemGrab = player.serverItemHolder;
         Transform cameraTransform = metarig.Find("CameraContainer/MainCamera");
         avatarDriver.AnimationDone(clonedAvatar.GetComponent<Animator>(), cameraTransform, player.IsLocal());
-        registeredAvatars.Add(player, clonedAvatar);
+        avatarDriver.SetupAvatar();
+        registeredAvatars.Add(clonedAvatar);
         if (cachedAvatarHashes.ContainsKey(player.GetIdentifier()))
             cachedAvatarHashes[player.GetIdentifier()] = hash;
         else

@@ -110,7 +110,7 @@ internal class UILoader
         Transform newButtonTransform = newButton.transform;
         GameObject newButtonTextGameObject = new GameObject("Text (TMP)");
         newButtonTextGameObject.transform.SetParent(newButtonTransform);
-        newButtonTextGameObject.transform.SetLocalPositionAndRotation(Vector3.zero, new Quaternion(0, 0, 0, 0));
+        newButtonTextGameObject.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
         newButtonTextGameObject.transform.localScale = Vector3.one;
         TMP_Text newButtonText = newButtonTextGameObject.AddComponent<TextMeshProUGUI>();
         newButtonText.text = "> Custom Avatars";

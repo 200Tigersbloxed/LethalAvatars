@@ -102,7 +102,8 @@ public class AvatarDriver : MonoBehaviour
     private CancellationTokenSource? cts;
 
     internal bool twoHanded;
-    internal Quaternion headrot;
+    internal Quaternion headrot = Quaternion.identity;
+    private Quaternion headRef;
 
     private List<string> failedFields = new();
 
@@ -244,10 +245,23 @@ public class AvatarDriver : MonoBehaviour
         avatarNearClips.ForEach(x => x.CreateShadows());
     }
 
+    internal void SetupAvatar()
+    {
+        Transform? head = GetBoneFromHumanoid(HumanBodyBones.Head);
+        if (head != null && Avatar != null)
+        {
+            // Assume the root gameobject points forward
+            Quaternion a = head.rotation;
+            Quaternion b = Avatar.transform.rotation;
+            Quaternion delta = Quaternion.Inverse(b) * a;
+            headRef = delta;
+        }
+    }
+
     private void Update()
     {
         // Prevent animators from offsetting avatar from center
-        transform.SetLocalPositionAndRotation(Vector3.zero, new Quaternion(0, 0, 0, 0));
+        transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
         if(player == null || Avatar == null) return;
         if (allowTurn != null && player.inTerminalMenu)
         {
@@ -276,7 +290,7 @@ public class AvatarDriver : MonoBehaviour
             // Only update head rot globally
             Transform? head = GetBoneFromHumanoid(HumanBodyBones.Head);
             if (head != null)
-                head.rotation = headrot;
+                head.rotation = headrot * headRef;
         }
         // Only update from here locally
         if (!player.IsLocal()) return;
