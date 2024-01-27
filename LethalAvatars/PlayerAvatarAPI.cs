@@ -156,13 +156,13 @@ public static class PlayerAvatarAPI
         AvatarDriver avatarDriver = clonedAvatar.gameObject.AddComponent<AvatarDriver>();
         avatarDriver.player = player;
         avatarDriver.Avatar = clonedAvatar;
+        avatarDriver.SetupAvatar(clonedAvatar.GetComponent<Animator>());
         avatarDriver.animators = InitializeAnimatorControllers(clonedAvatar);
         avatarDriver.lastLocalItemGrab = player.localItemHolder;
         avatarDriver.lastServerItemGrab = player.serverItemHolder;
         Transform cameraTransform = metarig.Find("CameraContainer/MainCamera");
         avatarDriver.AnimationDone(clonedAvatar.GetComponent<Animator>(), cameraTransform, player.IsLocal());
-        avatarDriver.SetupAvatar();
-        registeredAvatars.Add(clonedAvatar);
+        registeredAvatars.Add(player, clonedAvatar);
         if (cachedAvatarHashes.ContainsKey(player.GetIdentifier()))
             cachedAvatarHashes[player.GetIdentifier()] = hash;
         else

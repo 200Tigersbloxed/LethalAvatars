@@ -245,17 +245,16 @@ public class AvatarDriver : MonoBehaviour
         avatarNearClips.ForEach(x => x.CreateShadows());
     }
 
-    internal void SetupAvatar()
+    internal void SetupAvatar(Animator anim)
     {
-        Transform? head = GetBoneFromHumanoid(HumanBodyBones.Head);
-        if (head != null && Avatar != null)
-        {
-            // Assume the root gameobject points forward
-            Quaternion a = head.rotation;
-            Quaternion b = Avatar.transform.rotation;
-            Quaternion delta = Quaternion.Inverse(b) * a;
-            headRef = delta;
-        }
+        if (anim == null || anim.avatar == null) return;
+        Transform? head = anim.GetBoneTransform(HumanBodyBones.Head);
+        if (head == null || Avatar == null) return;
+        // Assume the root gameobject points forward
+        Quaternion a = head.rotation;
+        Quaternion b = Avatar.transform.rotation;
+        Quaternion delta = Quaternion.Inverse(b) * a;
+        headRef = delta;
     }
 
     private void Update()
