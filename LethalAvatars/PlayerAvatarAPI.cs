@@ -152,10 +152,11 @@ public static class PlayerAvatarAPI
         // Add new stuff
         clonedAvatar.gameObject.name = "avatar";
         clonedAvatar.transform.SetParent(metarig.parent);
-        clonedAvatar.transform.SetLocalPositionAndRotation(Vector3.zero, new Quaternion(0, 0, 0, 0));
+        clonedAvatar.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
         AvatarDriver avatarDriver = clonedAvatar.gameObject.AddComponent<AvatarDriver>();
         avatarDriver.player = player;
         avatarDriver.Avatar = clonedAvatar;
+        avatarDriver.SetupAvatar(clonedAvatar.GetComponent<Animator>());
         avatarDriver.animators = InitializeAnimatorControllers(clonedAvatar);
         avatarDriver.lastLocalItemGrab = player.localItemHolder;
         avatarDriver.lastServerItemGrab = player.serverItemHolder;
