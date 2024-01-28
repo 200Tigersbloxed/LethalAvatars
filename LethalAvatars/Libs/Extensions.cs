@@ -8,7 +8,6 @@ using System.Threading;
 using GameNetcodeStuff;
 using LethalAvatars.Networking.Messages;
 using LethalAvatars.SDK;
-using Unity.Netcode;
 using UnityEngine;
 
 namespace LethalAvatars.Libs;

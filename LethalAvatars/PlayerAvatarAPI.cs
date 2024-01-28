@@ -72,6 +72,7 @@ public static class PlayerAvatarAPI
             // Probably failed to find the avatar
             return null;
         }
+        assetBundle.Unload(false);
         cachedAvatars.Add(assetBundleHash, avatar);
         return CloneAvatar(avatar);
     }
