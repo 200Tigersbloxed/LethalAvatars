@@ -20,6 +20,8 @@ class Patches
     {
         static void Postfix(ref PlayerControllerB __instance)
         {
+            if(Plugin.joinedRound) return;
+            Plugin.joinedRound = true;
             NetworkHandler.connectedPlayers = PlayerAvatarAPI.GetAllPlayers().ToList();
             // Check if an avatar already exists
             if (PlayerAvatarAPI.RegisteredAvatars.ContainsKey(__instance))

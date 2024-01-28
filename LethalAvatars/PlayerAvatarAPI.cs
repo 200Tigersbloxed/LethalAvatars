@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using GameNetcodeStuff;
 using LethalAvatars.Libs;
-using LethalAvatars.Networking.Messages;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Playables;
@@ -21,7 +20,7 @@ public static class PlayerAvatarAPI
     public static Dictionary<PlayerControllerB, Avatar> RegisteredAvatars => new(registeredAvatars);
 
     internal static Dictionary<string, string> cachedAvatarHashes = new();
-
+    
     private static Dictionary<string, Avatar> cachedAvatars = new();
 
     /// <summary>
@@ -42,6 +41,25 @@ public static class PlayerAvatarAPI
 
     public static PlayerControllerB[] GetAllPlayers() => Object.FindObjectsOfType<PlayerControllerB>();
 
+    /// <summary>
+    /// Tries to create an instance of a cached avatar from its hash
+    /// </summary>
+    /// <param name="hash">The hash of the avatar</param>
+    /// <param name="avatar">The output avatar</param>
+    /// <returns>Whether or not there is an Avatar associated with the hash</returns>
+    public static bool TryGetCachedAvatar(string hash, out Avatar? avatar)
+    {
+        if (!cachedAvatars.TryGetValue(hash, out Avatar a))
+        {
+            avatar = null;
+            return false;
+        }
+        avatar = CloneAvatar(a);
+        return true;
+    }
+
+    private static Avatar? CloneAvatar(Avatar avatar) => Object.Instantiate(avatar.gameObject).GetComponent<Avatar>();
+
     private static Avatar? LoadAvatar(AssetBundle assetBundle, string assetBundleHash)
     {
         Avatar avatar;
@@ -55,7 +73,7 @@ public static class PlayerAvatarAPI
             return null;
         }
         cachedAvatars.Add(assetBundleHash, avatar);
-        return Object.Instantiate(avatar.gameObject).GetComponent<Avatar>();
+        return CloneAvatar(avatar);
     }
 
     /// <summary>
@@ -67,14 +85,7 @@ public static class PlayerAvatarAPI
     {
         string hash = Extensions.GetHashOfFile(fileLocation);
         if (cachedAvatars.TryGetValue(hash, out Avatar loadedAvatar))
-        {
-            if(loadedAvatar == null)
-            {
-                cachedAvatars.Remove(hash);
-                return null;
-            }
-            return Object.Instantiate(loadedAvatar.gameObject).GetComponent<Avatar>();
-        }
+            return CloneAvatar(loadedAvatar);
         try
         {
             AssetBundle assetBundle = AssetBundle.LoadFromFile(fileLocation);
@@ -268,19 +279,17 @@ public static class PlayerAvatarAPI
                         ApplyNewAvatar(avatar, player, hash);
                     return;
                 }
-            }
-            byte[]? data = null;
-            foreach (KeyValuePair<string,byte[]> keyValuePair in AvatarData.cachedAvatarData)
-            {
-                if(keyValuePair.Key != player.GetIdentifier()) continue;
-                data = keyValuePair.Value;
-            }
-            if (data != null)
-            {
-                Avatar? avatar = LoadAvatar(data);
-                if(avatar != null)
-                    ApplyNewAvatar(avatar, player, Extensions.GetHashOfData(data));
-                return;
+                Avatar? clonedAvatar = null;
+                foreach (KeyValuePair<string,Avatar> keyValuePair in cachedAvatars)
+                {
+                    if(keyValuePair.Key != hash) continue;
+                    clonedAvatar = CloneAvatar(keyValuePair.Value);
+                }
+                if (clonedAvatar != null)
+                {
+                    ApplyNewAvatar(clonedAvatar, player, hash);
+                    return;
+                }
             }
             Plugin.PluginLogger.LogDebug($"Failed to find cached avatar hash for {player.GetIdentifier()}");
         }

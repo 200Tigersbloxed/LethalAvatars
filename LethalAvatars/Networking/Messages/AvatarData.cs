@@ -16,7 +16,6 @@ internal class AvatarData : AvatarMessage
     
     internal static Dictionary<string, List<AvatarData>> cachedDatas = new();
     internal static Dictionary<string, DateTime> LastUpdates = new();
-    internal static Dictionary<string, byte[]> cachedAvatarData = new();
     
     public override string MessageName { get; set; } = $"{Plugin.GUID}.AvatarData";
     [ProtoMember(7)] public byte[] Data { get; set; } = Array.Empty<byte>();
@@ -59,9 +58,6 @@ internal class AvatarData : AvatarMessage
             cachedDatas.Remove(player.GetIdentifier());
             if (LastUpdates.ContainsKey(player.GetIdentifier()))
                 LastUpdates.Remove(player.GetIdentifier());
-            if (cachedAvatarData.ContainsKey(player.GetIdentifier()))
-                cachedAvatarData.Remove(player.GetIdentifier());
-            cachedAvatarData.Add(player.GetIdentifier(), combinedData);
             LoadingNameplate.Finish(player);
             return;
         }

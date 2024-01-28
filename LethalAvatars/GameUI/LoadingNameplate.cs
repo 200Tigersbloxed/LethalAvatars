@@ -87,7 +87,7 @@ internal class LoadingNameplate
         public void Apply(float percent)
         {
             slider.value = percent;
-            text.text = Math.Round(percent * 100, 2) + "%";
+            text.text = Math.Round(percent * 100, 2).ToString("0.00") + "%";
         }
 
         public bool _Update()

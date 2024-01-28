@@ -8,6 +8,7 @@ using System.Threading;
 using GameNetcodeStuff;
 using LethalAvatars.Networking.Messages;
 using LethalAvatars.SDK;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace LethalAvatars.Libs;
@@ -145,6 +146,12 @@ internal static class Extensions
         foreach (AvatarData avatarDataResponse in avatarDataResponses)
         {
             yield return new WaitForSeconds(0.0001f);
+            // Stop updating if we aren't connected anymore
+            if(!Plugin.joinedRound)
+            {
+                Plugin.PluginLogger.LogDebug("Broken");
+                yield break;
+            }
             avatarDataResponse.Send(player);
         }
     }

@@ -16,12 +16,16 @@ internal class SwitchAvatar : AvatarMessage
     protected override void Handle(PlayerControllerB player, AvatarMessage data)
     {
         SwitchAvatar switchAvatarMessage = (SwitchAvatar) data;
-        Plugin.PluginLogger.LogDebug($"Switching to avatar {AvatarFileHash} from {player.GetIdentifier()}");
         if(player.GetIdentifier() == PlayerAvatarAPI.LocalPlayer!.GetIdentifier())
         {
             Plugin.PluginLogger.LogDebug("Cannot apply avatar to local player in remote scope");
             return;
         }
+        // Don't switch avatars if its the same one
+        if (PlayerAvatarAPI.cachedAvatarHashes.ContainsKey(player.GetIdentifier()) &&
+            PlayerAvatarAPI.cachedAvatarHashes[player.GetIdentifier()] == switchAvatarMessage.AvatarFileHash)
+            return;
+        Plugin.PluginLogger.LogDebug($"Switching to avatar {AvatarFileHash} from {player.GetIdentifier()}");
         if (AvatarData.cachedDatas.ContainsKey(player.GetIdentifier()))
             AvatarData.cachedDatas.Remove(player.GetIdentifier());
         if (AvatarData.LastUpdates.ContainsKey(player.GetIdentifier()))
@@ -29,6 +33,11 @@ internal class SwitchAvatar : AvatarMessage
         // Remove current avatar
         if (PlayerAvatarAPI.RegisteredAvatars.ContainsKey(player))
             PlayerAvatarAPI.ResetPlayer(player);
+        if (PlayerAvatarAPI.TryGetCachedAvatar(switchAvatarMessage.AvatarFileHash, out Avatar? cachedAvatar))
+        {
+            PlayerAvatarAPI.ApplyNewAvatar(cachedAvatar!, player, switchAvatarMessage.AvatarFileHash);
+            return;
+        }
         string file = String.Empty;
         string h = String.Empty;
         foreach (string assetBundleFile in Directory.GetFiles(Plugin.AvatarsPath))

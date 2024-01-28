@@ -39,6 +39,8 @@ internal class Plugin : BaseUnityPlugin
     
     // Why is this protected? Not every log will come from this class...
     internal static ManualLogSource PluginLogger => PluginInstance!.Logger;
+
+    internal static bool joinedRound;
     
     private static Plugin? PluginInstance;
     private static string ConfigLocation = String.Empty;
@@ -73,9 +75,9 @@ internal class Plugin : BaseUnityPlugin
             }
             AvatarData.cachedDatas.Clear();
             AvatarData.LastUpdates.Clear();
-            AvatarData.cachedAvatarData.Clear();
             PlayerAvatarAPI.cachedAvatarHashes.Clear();
             Extensions.chunkedAvatarData.Clear();
+            joinedRound = false;
             if(UILoader.MainCanvas != null) return;
             // Setup Runner
             GameObject runner = new GameObject("LethalAvatarsRunner");
