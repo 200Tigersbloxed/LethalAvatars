@@ -75,6 +75,12 @@ public class AvatarNearClip : MonoBehaviour
             }
             else
             {
+                if (!AnimationUtility.IsChildOfTransform(transform, head))
+                {
+                    // SMR is not a child of the head; therefore, we can show it
+                    Destroy(this);
+                    return false;
+                }
                 // Suspect that this is a stray SkinnedMeshRenderer, we will treat it like a stray but also
                 // sync blendshapes
                 isStraySMR = true;
