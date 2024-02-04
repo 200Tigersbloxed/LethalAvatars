@@ -26,7 +26,7 @@ All Avatar formats are classified as `.lca` files (**L**ethal **C**ompany **A**v
 
 The first step to creating an avatar is using the correct Unity version. Lethal Company uses [2022.3.9f1](https://unity.com/releases/editor/whats-new/2022.3.9), and you should use this (or at least some other 2022.3.XX build).
 
-Next, import the [`LethalCompany.SDK.unitypackage`](https://github.com/200Tigersbloxed/LethalAvatars/releases/download/0.1.0/LethalCompany.SDK.unitypackage) file. 
+Next, import the [`LethalCompany.SDK.unitypackage`](https://github.com/200Tigersbloxed/LethalAvatars/releases/download/0.1.0/LethalAvatars.SDK.unitypackage) file. 
 
 Finally, build with the `LethalAvatars > Build` window.
 
