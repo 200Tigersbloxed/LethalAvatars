@@ -75,7 +75,7 @@ internal class Plugin : BaseUnityPlugin
             }
             AvatarData.cachedDatas.Clear();
             AvatarData.LastUpdates.Clear();
-            PlayerAvatarAPI.cachedAvatarHashes.Clear();
+            PlayerAvatarAPI.Teardown();
             Extensions.chunkedAvatarData.Clear();
             joinedRound = false;
             if(UILoader.MainCanvas != null) return;

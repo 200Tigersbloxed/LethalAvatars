@@ -20,8 +20,18 @@ public static class PlayerAvatarAPI
     public static Dictionary<PlayerControllerB, Avatar> RegisteredAvatars => new(registeredAvatars);
 
     internal static Dictionary<string, string> cachedAvatarHashes = new();
-    
-    private static Dictionary<string, Avatar> cachedAvatars = new();
+
+    private static Dictionary<string, Avatar> CachedAvatars
+    {
+        get
+        {
+            Dictionary<string, Avatar> c = new();
+            foreach (KeyValuePair<string, (Avatar, AssetBundle)> a in new Dictionary<string, (Avatar, AssetBundle)>(cachedAvatars))
+                c.Add(a.Key, a.Value.Item1);
+            return c;
+        }
+    }
+    private static Dictionary<string, (Avatar, AssetBundle)> cachedAvatars = new();
 
     /// <summary>
     /// Gets the current LocalPlayer. Null if no LocalPlayer exists or if not in the GameScene.
@@ -49,7 +59,7 @@ public static class PlayerAvatarAPI
     /// <returns>Whether or not there is an Avatar associated with the hash</returns>
     public static bool TryGetCachedAvatar(string hash, out Avatar? avatar)
     {
-        if (!cachedAvatars.TryGetValue(hash, out Avatar a))
+        if (!CachedAvatars.TryGetValue(hash, out Avatar a))
         {
             avatar = null;
             return false;
@@ -72,8 +82,9 @@ public static class PlayerAvatarAPI
             // Probably failed to find the avatar
             return null;
         }
-        assetBundle.Unload(false);
-        cachedAvatars.Add(assetBundleHash, avatar);
+        // TODO: unload whenever needed
+        //assetBundle.Unload(false);
+        cachedAvatars.Add(assetBundleHash, (avatar, assetBundle));
         return CloneAvatar(avatar);
     }
 
@@ -85,7 +96,7 @@ public static class PlayerAvatarAPI
     public static Avatar? LoadAvatar(string fileLocation)
     {
         string hash = Extensions.GetHashOfFile(fileLocation);
-        if (cachedAvatars.TryGetValue(hash, out Avatar loadedAvatar))
+        if (CachedAvatars.TryGetValue(hash, out Avatar loadedAvatar))
             return CloneAvatar(loadedAvatar);
         try
         {
@@ -107,7 +118,7 @@ public static class PlayerAvatarAPI
     public static Avatar? LoadAvatar(byte[] avatarData)
     {
         string hash = Extensions.GetHashOfData(avatarData);
-        if (cachedAvatars.TryGetValue(hash, out Avatar loadedAvatar))
+        if (CachedAvatars.TryGetValue(hash, out Avatar loadedAvatar))
             return Object.Instantiate(loadedAvatar.gameObject).GetComponent<Avatar>();
         try
         {
@@ -281,7 +292,7 @@ public static class PlayerAvatarAPI
                     return;
                 }
                 Avatar? clonedAvatar = null;
-                foreach (KeyValuePair<string,Avatar> keyValuePair in cachedAvatars)
+                foreach (KeyValuePair<string,Avatar> keyValuePair in CachedAvatars)
                 {
                     if(keyValuePair.Key != hash) continue;
                     clonedAvatar = CloneAvatar(keyValuePair.Value);
@@ -294,5 +305,18 @@ public static class PlayerAvatarAPI
             }
             Plugin.PluginLogger.LogDebug($"Failed to find cached avatar hash for {player.GetIdentifier()}");
         }
+    }
+
+    internal static void Teardown()
+    {
+        cachedAvatarHashes.Clear();
+        foreach (KeyValuePair<string, (Avatar, AssetBundle)> cachedAvatar in
+                 new Dictionary<string, (Avatar, AssetBundle)>(cachedAvatars))
+        {
+            Object.DestroyImmediate(cachedAvatar.Value.Item1);
+            cachedAvatar.Value.Item2.Unload(true);
+        }
+        cachedAvatars.Clear();
+        registeredAvatars.Clear();
     }
 }
