@@ -17,7 +17,7 @@ internal class Plugin : BaseUnityPlugin
 {
     internal const string GUID = "gay.tigers.lethalavatars";
     internal const string NAME = "LethalAvatars";
-    internal const string VERSION = "0.1.0";
+    internal const string VERSION = "0.1.1";
 
     /// <summary>
     /// The location where Avatars are stored. Check if empty before using! Is initialized on BaseUnityPlugin.Awake()

@@ -117,6 +117,8 @@ public static class PlayerAvatarAPI
     /// <returns>Nullable Avatar; null if failed to load</returns>
     public static Avatar? LoadAvatar(byte[] avatarData)
     {
+        // TODO: Optimize
+        AssetBundle.UnloadAllAssetBundles(false);
         string hash = Extensions.GetHashOfData(avatarData);
         if (CachedAvatars.TryGetValue(hash, out Avatar loadedAvatar))
             return Object.Instantiate(loadedAvatar.gameObject).GetComponent<Avatar>();
@@ -157,21 +159,8 @@ public static class PlayerAvatarAPI
     /// <param name="hash">The MD5 hash of the data for the Avatar</param>
     public static void ApplyNewAvatar(Avatar clonedAvatar, PlayerControllerB player, string hash)
     {
-        // Disable and rename old stuff
-        Transform scav = player.transform.Find("ScavengerModel");
-        for (int i = 0; i < scav.childCount; i++)
-        {
-            Transform child = scav.GetChild(i);
-            if(!child.gameObject.name.Contains("LOD")) continue;
-            child.gameObject.GetComponent<SkinnedMeshRenderer>().enabled = false;
-            child.gameObject.SetActive(false);
-        }
-        Transform metarig = scav.Find("metarig");
-        Transform armsMetaRig = metarig.Find("ScavengerModelArmsOnly/Circle");
-        armsMetaRig.GetComponent<SkinnedMeshRenderer>().enabled = false;
-        Transform spine003 = metarig.Find("spine/spine.001/spine.002/spine.003");
-        spine003.Find("LevelSticker").gameObject.SetActive(false);
-        spine003.Find("BetaBadge").gameObject.SetActive(false);
+        HideAvatarStuff(player);
+        Transform metarig = player.transform.Find("ScavengerModel/metarig");
         // Add new stuff
         clonedAvatar.gameObject.name = "avatar";
         clonedAvatar.transform.SetParent(metarig.parent);
@@ -209,6 +198,39 @@ public static class PlayerAvatarAPI
             if (camera != targetCamera) return;
             renderer.shadowCastingMode = ShadowCastingMode.On;
         };
+    }
+
+    /// <summary>
+    /// Hides all the avatar things
+    /// </summary>
+    /// <param name="player">The player to hide things on the avatar</param>
+    public static void HideAvatarStuff(PlayerControllerB? player)
+    {
+        if(player == null) return;
+        try
+        {
+            Transform scav = player.transform.Find("ScavengerModel");
+            Transform metarig = scav.Find("metarig");
+            // Disable and rename old stuff
+            for (int i = 0; i < scav.childCount; i++)
+            {
+                Transform child = scav.GetChild(i);
+                if (!child.gameObject.name.Contains("LOD")) continue;
+                child.gameObject.GetComponent<SkinnedMeshRenderer>().enabled = false;
+                child.gameObject.SetActive(false);
+            }
+
+            Transform armsMetaRig = metarig.Find("ScavengerModelArmsOnly/Circle");
+            armsMetaRig.GetComponent<SkinnedMeshRenderer>().enabled = false;
+            Transform spine003 = metarig.Find("spine/spine.001/spine.002/spine.003");
+            spine003.Find("LevelSticker").gameObject.SetActive(false);
+            spine003.Find("BetaBadge").gameObject.SetActive(false);
+        }
+        catch (Exception e)
+        {
+            Plugin.PluginLogger.LogWarning("Failed to hide avatar stuff to player " + player.actualClientId);
+            Plugin.PluginLogger.LogDebug(e);
+        }
     }
 
     /// <summary>

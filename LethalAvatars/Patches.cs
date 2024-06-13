@@ -108,7 +108,17 @@ class Patches
     [HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.ReviveDeadPlayers), new Type[0])]
     class StartOfRoundPatchB
     {
-        static void Postfix() => PlayerAvatarAPI.RefreshAllAvatars();
+        private static IEnumerator WaitToHide()
+        {
+            yield return new WaitForSeconds(1);
+            PlayerAvatarAPI.HideAvatarStuff(PlayerAvatarAPI.LocalPlayer);
+        }
+        
+        static void Postfix()
+        {
+            PlayerAvatarAPI.RefreshAllAvatars();
+            LethalAvatarsRunner.Instance!.RunCoroutine(WaitToHide());
+        }
     }
 
     [HarmonyPatch(typeof(GameNetworkManager), "ResetGameValuesToDefault", new Type[0])]

@@ -102,7 +102,7 @@ internal static class Extensions
     }
 
 
-    internal static void LoadFromMemory(PlayerControllerB player, byte[] combinedData)
+    internal static void LoadFromMemory(PlayerControllerB player, byte[] combinedData, string overrideHash = "")
     {
         // Remove current avatar
         if (PlayerAvatarAPI.RegisteredAvatars.ContainsKey(player))
@@ -117,6 +117,8 @@ internal static class Extensions
         if (avatar.AllowDownloading)
         {
             string hash = GetHashOfData(combinedData);
+            if (!string.IsNullOrEmpty(overrideHash))
+                hash = overrideHash;
             bool containsHash = false;
             foreach (string f in Directory.GetFiles(Plugin.AvatarsPath))
             {

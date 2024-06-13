@@ -54,7 +54,7 @@ internal class AvatarData : AvatarMessage
                 }
             }
             byte[] combinedData = cd.ToArray();
-            Extensions.LoadFromMemory(player, combinedData);
+            Extensions.LoadFromMemory(player, combinedData, avatarDataResponse.AvatarHash);
             cachedDatas.Remove(player.GetIdentifier());
             if (LastUpdates.ContainsKey(player.GetIdentifier()))
                 LastUpdates.Remove(player.GetIdentifier());
