@@ -12,7 +12,7 @@ To describe this mod very shortly, it allows you to express your creativity and 
 
 This mod uses [BepInEx v5.4.22](https://github.com/BepInEx/BepInEx/releases/tag/v5.4.22).
 
-Fortunately, the mod is simply one dll. No dependencies required! Just drag [`LethalAvatars.dll`](https://github.com/200Tigersbloxed/LethalAvatars/releases/download/0.1.0/LethalAvatars.dll) to `path/to/Lethal Comnpany/BepInEx/plugins` folder and done!
+Fortunately, the mod is simply one dll. No dependencies required! Just drag [`LethalAvatars.dll`](https://github.com/200Tigersbloxed/LethalAvatars/releases/download/0.1.1/LethalAvatars.dll) to `path/to/Lethal Comnpany/BepInEx/plugins` folder and done!
 
 ## Installing an Avatar
 
@@ -26,7 +26,7 @@ All Avatar formats are classified as `.lca` files (**L**ethal **C**ompany **A**v
 
 The first step to creating an avatar is using the correct Unity version. Lethal Company uses [2022.3.9f1](https://unity.com/releases/editor/whats-new/2022.3.9), and you should use this (or at least some other 2022.3.XX build).
 
-Next, import the [`LethalCompany.SDK.unitypackage`](https://github.com/200Tigersbloxed/LethalAvatars/releases/download/0.1.0/LethalAvatars.SDK.unitypackage) file. 
+Next, import the [`LethalCompany.SDK.unitypackage`](https://github.com/200Tigersbloxed/LethalAvatars/releases/download/0.1.1/LethalAvatars.SDK.unitypackage) file. 
 
 Finally, build with the `LethalAvatars > Build` window.
 
